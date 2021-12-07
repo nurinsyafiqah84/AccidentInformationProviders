@@ -1,0 +1,79 @@
+CREATE TABLE Station
+(
+	stationId	VARCHAR(10),
+	stationName	VARCHAR(50)	NOT NULL,
+	stationCity 	VARCHAR(20)	NOT NULL,
+	stationAddress 	VARCHAR(1000)	NOT NULL,
+	
+	CONSTRAINT Station_PK PRIMARY KEY (stationId)
+);
+
+CREATE TABLE Police
+(
+	policeId	VARCHAR(10),
+	policeName	VARCHAR(100) 	NOT NULL,
+	policePhoneNum	VARCHAR(10)		NOT NULL,
+	policeAddress	VARCHAR(250)	NOT NULL,
+	policeEmail	VARCHAR(100)	NOT NULL,
+	stationId	VARCHAR(10)	NOT NULL,
+	
+	CONSTRAINT Police_PK PRIMARY KEY (policeId, stationId),
+	CONSTRAINT Police_Station_FK FOREIGN KEY (stationId) REFERENCES Station (stationId)
+);
+
+CREATE TABLE Accident
+(
+	accidentId		VARCHAR(10),
+	accidentPeopleInvolve	VARCHAR(10)	NOT NULL,
+	accidentStreetName	VARCHAR(100)	NOT NULL,
+	accidentState		VARCHAR(20)	NOT NULL,
+	accidentCostTotalPrice	INTEGER		NOT NULL,
+	
+	CONSTRAINT Accident_PK PRIMARY KEY (accidentId)
+);
+
+CREATE TABLE Report
+(
+	reportId	VARCHAR(10),
+	reportDate	DATE		NOT NULL,
+	reportTime	TIME		NOT NULL,
+	reportStatus	VARCHAR(20)	NOT NULL,
+	reportCost	int		NOT NULL,
+	reportDetails	VARCHAR(1000)	NOT NULL,
+	accidentId	VARCHAR(10)	NOT NULL,
+	policeId	VARCHAR(10)	NOT NULL,
+
+	CONSTRAINT Report_PK PRIMARY KEY (reportId, accidentId, policeId),
+	CONSTRAINT Accident_Report_FK FOREIGN KEY (accidentId) REFERENCES Accident (accidentId),
+	CONSTRAINT Report_Police_FK FOREIGN KEY (policeId) REFERENCES Police (policeId)
+);
+
+CREATE TABLE Driver
+(
+	driverId	VARCHAR(15)	NOT NULL,
+	driverName	VARCHAR(1000)	NOT NULL,
+	driverAge	INT		NOT NULL,
+	driverSex	VARCHAR(10)	NOT NULL,
+	reportId	VARCHAR(10)	NOT NULL,
+
+	CONSTRAINT Driver_PK PRIMARY KEY (reportId),
+	CONSTRAINT Driver_Report_FK FOREIGN KEY (reportId) REFERENCES Report (reportId)
+);
+
+CREATE TABLE Vehicle
+(
+	vehicleNum		VARCHAR(10)	NOT NULL,
+	vehicleOwnerName	VARCHAR(100)	NOT NULL,
+	reportId		VARCHAR(10)	NOT NULL,
+
+	CONSTRAINT Vehicle_PK PRIMARY KEY (reportId),
+	CONSTRAINT Vehicle_Report_FK FOREIGN KEY (reportId) REFERENCES Report (reportId)
+);
+
+INSERT INTO Station VALUES ('BP1001', 'Balai Polis Kuala Lumpur', 'Kuala Lumpur', 'Jalan Hang Tuah, 51100 Kuala Lumpur');
+INSERT INTO Station VALUES ('BP1002', 'Balai Polis Melaka', 'Melaka', 'Jalan Merdeka, Bandar Hilir, 75000 Melaka');
+INSERT INTO Station VALUES ('BP1003', 'Balai Polis Johor Bahru', 'Johor Bahru', 'Jalan Meldrum, 80000 Johor Bahru');
+INSERT INTO Station VALUES ('BP1004', 'Balai Polis Kuantan', 'Pahang', 'Jalan Mahkota, 25000 Kuantan, Pahang');
+INSERT INTO Station VALUES ('BP1005', 'Balai Polis Kota Setar', 'Kedah', 'Jalan Raja, 05560 Alor Setar, Kedah');
+INSERT INTO Station VALUES ('BP1006', 'Balai Polis Kelantan', 'Kelantan', 'Jalan Bayam, 15990 Kota Bharu, Kelantan');
+INSERT INTO Station VALUES ('BP1007', 'Balai Polis Terengganu', 'Terengganu', 'Jalan Sultan Omar, 20918 Kuala Terengganu, Terengganu');
